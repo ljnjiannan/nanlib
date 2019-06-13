@@ -1,5 +1,7 @@
 apply plugin: 'java-library'
+apply plugin: 'com.github.dcendents.android-maven'
 
+group='com.nan.nanlib'
 def retrofit2_version = "2.4.0"
 dependencies {
     api 'io.reactivex.rxjava2:rxjava:2.2.9'
