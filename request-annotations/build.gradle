@@ -1,0 +1,13 @@
+apply plugin: 'java-library'
+
+def retrofit2_version = "2.4.0"
+dependencies {
+    api 'io.reactivex.rxjava2:rxjava:2.2.9'
+
+    api "com.squareup.retrofit2:retrofit:${retrofit2_version}"
+    api "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
+    api "com.squareup.retrofit2:adapter-rxjava2:${retrofit2_version}"
+}
+
+sourceCompatibility = "7"
+targetCompatibility = "7"

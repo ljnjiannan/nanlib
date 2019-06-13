@@ -1,0 +1,2 @@
+include ':app', ':request', ':compile', ':request-annotations'
+rootProject.name='NanLib'
