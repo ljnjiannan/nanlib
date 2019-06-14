@@ -2,19 +2,14 @@ package com.nan.nanlib;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
-import com.nan.nanlib.remotelog.LogService;
-import com.nan.nanlib.remotelog.LoggerUtil;
-import com.nan.nanlib.remotelog.RemoteService;
 import com.nan.nanlib.request.BaseObserver;
 import com.nan.nanlib.request.BaseResponseEntity;
 import com.nan.nanlib.request.RxSchedulers;
 import com.nan.nanlib.request.ServiceGenerator;
-import com.nan.nanlib.request.impl.RemoteServiceImpl;
 import com.nan.nanlib.request.impl.ServiceFactory;
+import com.nan.nanlib.utils.LoggerUtil;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ServiceGenerator.init("http://192.168.30.185:8360");
 
-        ServiceFactory.getRemoteService().getHospitalInfo()
+        ServiceFactory.getRemoteService().getHospitalInfo("haha")
                 .compose(RxSchedulers.<BaseResponseEntity<String>>compose())
                 .subscribe(new BaseObserver<String>() {
                     @Override

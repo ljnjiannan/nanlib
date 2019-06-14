@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 public class BaseResponseEntity<T> {
     @SerializedName("success")
     protected boolean success;
-    @SerializedName("entity")
+    @SerializedName("data")
     protected T data;
     @SerializedName("message")
     protected String message;

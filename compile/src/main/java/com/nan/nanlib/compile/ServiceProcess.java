@@ -26,6 +26,9 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.TypeVariable;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
@@ -143,8 +146,26 @@ public class ServiceProcess extends AbstractProcessor {
             } else if (element.getKind() == ElementKind.METHOD) {
                 ExecutableElement methodElement = (ExecutableElement) element;
                 String methodName = element.getSimpleName().toString();
+                List<? extends VariableElement> methodParameters = methodElement.getParameters();
+                List<String> paramsStrList = new ArrayList<>();
+                List<String> paramsValueList = new ArrayList<>();
+                for (VariableElement variableElement : methodParameters) {
+                    TypeMirror methodParameterType = variableElement.asType();
+                    if (methodParameterType instanceof TypeVariable) {
+                        TypeVariable typeVariable = (TypeVariable) methodParameterType;
+                        methodParameterType = typeVariable.getUpperBound();
+
+                    }
+                    //参数名
+                    String parameterName = variableElement.getSimpleName().toString();
+                    //参数类型
+                    String parameteKind = methodParameterType.toString();
+                    paramsStrList.add(String.format("%s %s",parameteKind, parameterName));
+                    paramsValueList.add(parameterName);
+                }
                 String returnType = methodElement.getReturnType().toString();//获取TypeMirror;
-                methodsStr.append(String.format("\tpublic %s %s() {return api.%s();}\n\n", returnType, methodName, methodName));
+
+                methodsStr.append(String.format("\tpublic %s %s(%s) {return api.%s(%s);}\n\n", returnType, methodName,String.join(",", paramsStrList), methodName, String.join(",",paramsValueList)));
             }
         }
 

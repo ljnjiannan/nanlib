@@ -2,10 +2,6 @@ package com.nan.nanlib;
 
 import android.app.Application;
 
-import com.nan.nanlib.remotelog.LoggerUtil;
-import com.nan.nanlib.request.annotation.RequestApi;
-
-import java.lang.reflect.Field;
 
 public class MainApplication extends Application {
 
@@ -14,7 +10,6 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
 
     }
 }

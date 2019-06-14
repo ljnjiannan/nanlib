@@ -1,7 +1,9 @@
 package com.nan.nanlib.remotelog;
 
+import com.nan.nanlib.utils.DateUtil;
+import com.nan.nanlib.utils.LoggerUtil;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class RemoteLoggerManager {
@@ -11,7 +13,7 @@ public class RemoteLoggerManager {
 
     public static void addLog(String tag,String message) {
         synchronized (LOCK) {
-            String logString = String.format("%s %s %s",DateUtil.getCurrentTime(),tag,message);
+            String logString = String.format("%s %s %s", DateUtil.getCurrentTime(),tag,message);
             logList.add(logString);
         }
     }

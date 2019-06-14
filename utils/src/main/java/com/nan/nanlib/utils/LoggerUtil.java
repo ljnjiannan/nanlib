@@ -1,4 +1,4 @@
-package com.nan.nanlib.remotelog;
+package com.nan.nanlib.utils;
 
 import android.util.Log;
 

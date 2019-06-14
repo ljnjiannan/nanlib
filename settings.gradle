@@ -1,2 +1,2 @@
-include ':app', ':request', ':compile', ':request-annotations'
+include ':app', ':request', ':compile', ':request-annotations', ':utils'
 rootProject.name='NanLib'
