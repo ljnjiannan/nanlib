@@ -1,12 +1,10 @@
 package com.nan.nanlib.request;
 
-import com.nan.nanlib.request.retrofit.HeaderInterception;
-import com.nan.nanlib.request.retrofit.ParamsInterception;
-import com.nan.nanlib.request.retrofit.RetryTokenInterception;
-
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -17,36 +15,42 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceGenerator {
 
-    private static String baseUrl = "http://127.0.0.1";
-    private static final int DEFAULT_CONNECT_TIMEOUT = 60;
-    private static final int DEFAULT_READ_TIMEOUT = 60;
-    private static final int DEFAULT_WRITE_TIMEOUT = 60;
+    private static ServiceConfig serviceConfig;
 
-    public static void init(String url) {
-        baseUrl = url;
+    public static void init(ServiceConfig config) {
+        serviceConfig = config;
     }
 
     public static <T> T createNormalService(Class<T> serviceClass) {
+        if (serviceConfig == null) throw new NullPointerException("please init config");
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(serviceConfig.getUrl())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
+
+        if (serviceConfig.getFactoryList().size() > 0 ) {
+            for (Converter.Factory factory : serviceConfig.getFactoryList()) {
+                builder.addConverterFactory(factory);
+            }
+        }else {
+            builder.addConverterFactory(GsonConverterFactory.create());
+        }
 
         Retrofit retrofit = builder.client(getNormalOkHttpClient()).build();
         return retrofit.create(serviceClass);
     }
 
     private static OkHttpClient getNormalOkHttpClient(){
-        return new OkHttpClient.Builder()
+        OkHttpClient.Builder client = new OkHttpClient.Builder()
                 // 超时设置
-                .connectTimeout(DEFAULT_CONNECT_TIMEOUT, TimeUnit.SECONDS)
-                .readTimeout(DEFAULT_READ_TIMEOUT, TimeUnit.SECONDS)
-                .writeTimeout(DEFAULT_WRITE_TIMEOUT, TimeUnit.SECONDS)
-                // 增加 header
-                .addInterceptor(new HeaderInterception())
-                .addInterceptor(new ParamsInterception())
-                .addInterceptor(new RetryTokenInterception())
-                .build();
+                .connectTimeout(serviceConfig.getDEFAULT_CONNECT_TIMEOUT(), TimeUnit.SECONDS)
+                .readTimeout(serviceConfig.getDEFAULT_READ_TIMEOUT(), TimeUnit.SECONDS)
+                .writeTimeout(serviceConfig.getDEFAULT_WRITE_TIMEOUT(), TimeUnit.SECONDS);
+
+        for (Interceptor interceptor : serviceConfig.getInterceptorList()) {
+            client.addInterceptor(interceptor);
+        }
+
+        return client.build();
     }
 
 }

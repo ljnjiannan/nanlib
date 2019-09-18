@@ -18,12 +18,12 @@ annotationProcessor 'site.nntec.nanlib:compile:latest.release'
 
 1、在Application或任意使用网络请求之前的位置使用`ServiceGenerator.init`初始化配置
 ```
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ServiceGenerator.init("http://192.168.30.185:8360");
-    }
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    ServiceGenerator.init("http://192.168.30.185:8360");
+}
 ```
 
 2、为所有的接口类加上`@RequestApi`注解
